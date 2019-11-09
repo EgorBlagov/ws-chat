@@ -1,0 +1,11 @@
+nginx
+node_modules
+dist
+.gitignore
+.git
+README.md
+LICENSE
+.vscode
+.dockerignore
+Dockerfile*
+docker-compose*

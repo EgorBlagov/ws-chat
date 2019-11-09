@@ -1,4 +1,5 @@
 import * as io from "socket.io-client";
+import { getUrl } from "../common/url";
 import { safeGet } from "../common/utils";
 
 export interface ISocket {
@@ -12,7 +13,7 @@ class SocketIo implements ISocket {
 
     public connect(): void {
         this.socket = io.connect("/", {
-            path: "/socket",
+            path: getUrl("/socket"),
         });
     }
 

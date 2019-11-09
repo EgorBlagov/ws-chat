@@ -34,7 +34,7 @@ module.exports = env => {
         resolve: {
             extensions: [...commonConfig.resolve.extensions, ".tsx", ".jsx"],
         },
-        entry: "./src/client/index.tsx",
+        entry: "./src/client/Index.tsx",
         output: {
             path: path.resolve(outputDir, "client"),
             filename: "client.js",

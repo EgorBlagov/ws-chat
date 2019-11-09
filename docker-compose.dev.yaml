@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+    nginx:
+        image: nginx
+        volumes:
+            - ./nginx/chat.template:/etc/nginx/conf.d/chat.template:ro
+        ports:
+            - 8080:80
+        networks:
+            - intnet
+        depends_on:
+            - chat
+        environment:
+            - CHAT_PORT=${PORT}
+            - CHAT_LOCATION=${PUBLIC_URL}/
+        command: /bin/bash -c "envsubst '$$CHAT_PORT $$CHAT_LOCATION' < /etc/nginx/conf.d/chat.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+        logging:
+            driver: none
+    chat:
+        networks:
+            - intnet
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+            args:
+                PUBLIC_URL: ${PUBLIC_URL}
+        environment:
+            - PORT=${PORT}
+        tty: true
+networks:
+    intnet: {}
