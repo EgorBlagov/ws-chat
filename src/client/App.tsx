@@ -1,37 +1,54 @@
+import * as _ from "lodash";
+import * as React from "react";
+import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import { isOk } from "../common/utils";
+import { SocketEventHandler, SocketEvents } from "../common/websocket-declaration";
+import { EnterNameModal } from "./EnterNameModal";
+import { socket } from "./socket-client";
+
 import "./App.css";
 
-import * as React from "react";
-import { Button, Col, Row } from "react-bootstrap";
-import { Container, ListGroup } from "react-bootstrap";
+function useSocketHandler<T extends SocketEvents>(socketEvent: T, handler: SocketEventHandler<T>) {
+    React.useEffect(() => {
+        socket.handle(socketEvent, handler);
+        return () => {
+            socket.removeHandler(socketEvent, handler);
+        };
+    }, []);
+}
 
 export const App = () => {
+    const [name, setName] = React.useState<string>(undefined);
+    const [users, setUsers] = React.useState<string[]>([]);
+    useSocketHandler(SocketEvents.Users, usersBody => {
+        setUsers(usersBody.users);
+    });
+
+    const saveName = (newName: string) => {
+        socket.send(SocketEvents.Username, {
+            username: newName,
+        });
+        setName(newName);
+    };
+
     return (
         <div className="wrapper">
             <div className="main">
                 <div className="main__body">
-                    <Container>
+                    <Container fluid={true}>
                         <Row>
-                            <Col xs={5}>
-                                <ListGroup>
-                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                                    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                                    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                            <Col xs={2}>
+                                <ListGroup variant="flush">
+                                    {_.map(users, u => (
+                                        <ListGroup.Item key={u} className="p-1">
+                                            <div className="d-flex justify-content-center">{u}</div>
+                                        </ListGroup.Item>
+                                    ))}
                                 </ListGroup>
-                            </Col>
-                            <Col xs={7}>
-                                <ListGroup>
-                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                                    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                                    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-                                </ListGroup>
-                                <Button variant="info">Hey</Button>
                             </Col>
                         </Row>
                     </Container>
+                    <EnterNameModal show={!isOk(name)} onSaveName={saveName} usedNames={users} />
                 </div>
             </div>
         </div>
