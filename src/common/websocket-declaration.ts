@@ -6,43 +6,74 @@ export enum SocketEvents {
     Users = "Users",
     Username = "Username",
     Joined = "Joined",
-    History = "History",
     Message = "Message",
+    ClientMessage = "ClientMessage",
     Left = "Left",
 }
 
 export enum SocketDefinitionTypes {
     Body,
+    Callback,
 }
 
-export interface IUsersBody {
-    users: string[];
-}
-
-export interface IUsernameBody {
+export type TUserID = string;
+export interface IUser {
     username: string;
+}
+
+export interface IUsers {
+    users: Record<TUserID, IUser>;
+}
+
+export interface IUsername {
+    username: string;
+}
+
+export interface IMessage {
+    authorId: TUserID;
+    message: string;
+    timestamp: number;
+}
+
+export interface IClientMessage {
+    message: string;
+}
+
+export interface IUserEvent {
+    userId: TUserID;
+    timestamp: number;
 }
 
 export interface ISocketDefinitionTypeMap {
     [SocketEvents.Users]: {
-        [SocketDefinitionTypes.Body]: IUsersBody;
+        [SocketDefinitionTypes.Body]: IUsers;
+        [SocketDefinitionTypes.Callback]: null;
     };
     [SocketEvents.Username]: {
-        [SocketDefinitionTypes.Body]: IUsernameBody;
+        [SocketDefinitionTypes.Body]: IUsername;
+        [SocketDefinitionTypes.Callback]: (id: TUserID) => void;
     };
     [SocketEvents.Joined]: {
-        [SocketDefinitionTypes.Body]: {};
-    };
-    [SocketEvents.History]: {
-        [SocketDefinitionTypes.Body]: {};
+        [SocketDefinitionTypes.Body]: IUserEvent;
+        [SocketDefinitionTypes.Callback]: null;
     };
     [SocketEvents.Message]: {
-        [SocketDefinitionTypes.Body]: {};
+        [SocketDefinitionTypes.Body]: IMessage;
+        [SocketDefinitionTypes.Callback]: null;
     };
     [SocketEvents.Left]: {
-        [SocketDefinitionTypes.Body]: {};
+        [SocketDefinitionTypes.Body]: IUserEvent;
+        [SocketDefinitionTypes.Callback]: null;
+    };
+    [SocketEvents.ClientMessage]: {
+        [SocketDefinitionTypes.Body]: IClientMessage;
+        [SocketDefinitionTypes.Callback]: null;
     };
 }
 
 export type SocketEventBody<T extends SocketEvents> = ISocketDefinitionTypeMap[T][SocketDefinitionTypes.Body];
-export type SocketEventHandler<T extends SocketEvents> = (body: SocketEventBody<T>) => void;
+export type SocketEventCallback<T extends SocketEvents> = ISocketDefinitionTypeMap[T][SocketDefinitionTypes.Callback];
+export type SocketEventHandler<T extends SocketEvents> = (
+    body: SocketEventBody<T>,
+    ack?: SocketEventCallback<T>,
+) => void;

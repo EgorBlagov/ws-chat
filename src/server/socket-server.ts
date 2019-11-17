@@ -3,18 +3,17 @@ import * as _ from "lodash";
 import * as io from "socket.io";
 
 import { Server } from "http";
-import { isOk } from "../common/utils";
-import { SocketEventBody, SocketEventHandler, SocketEvents, socketPath } from "../common/websocket-declaration";
+import { isOk, safeGet } from "../common/utils";
+import {
+    IMessage,
+    IUsers,
+    SocketEventBody,
+    SocketEventHandler,
+    SocketEvents,
+    socketPath,
+    TUserID,
+} from "../common/websocket-declaration";
 import { logger } from "./logging";
-
-declare global {
-    namespace SocketIO {
-        // tslint:disable-next-line: interface-name
-        interface Socket {
-            username: string;
-        }
-    }
-}
 
 export interface ISocketServer {
     connect(server: Server): void;
@@ -22,7 +21,10 @@ export interface ISocketServer {
 
 class SocketServer implements ISocketServer {
     private io: io.Server;
+    private usersCache: Record<TUserID, string>;
+
     public connect(server: Server): void {
+        this.usersCache = {};
         this.io = io(server, {
             path: socketPath,
         });
@@ -33,23 +35,41 @@ class SocketServer implements ISocketServer {
     }
 
     private onConnected(socket: io.Socket): void {
-        this.sendEvent(this.io.sockets, SocketEvents.Users, {
-            users: this.getUsernames(),
-        });
+        this.sendEvent(socket, SocketEvents.Users, this.getUsers());
 
         logger.info("new connection, total: " + _.size(this.io.sockets.sockets));
         socket.on("disconnect", () => {
             logger.info("lost connection, total: " + _.size(this.io.sockets.sockets));
-            this.sendEvent(this.io.sockets, SocketEvents.Users, {
-                users: this.getUsernames(),
+            if (isOk(this.usersCache[socket.id])) {
+                this.sendEvent(this.io.sockets, SocketEvents.Left, {
+                    timestamp: Date.now(),
+                    userId: socket.id,
+                });
+            }
+
+            delete this.usersCache[socket.id];
+            this.sendEvent(this.io.sockets, SocketEvents.Users, this.getUsers());
+        });
+
+        this.handleEvent(socket, SocketEvents.Username, (body, ack) => {
+            this.usersCache[socket.id] = body.username;
+            ack(socket.id);
+
+            this.sendEvent(this.io.sockets, SocketEvents.Users, this.getUsers());
+            this.sendEvent(this.io.sockets, SocketEvents.Joined, {
+                timestamp: Date.now(),
+                userId: socket.id,
             });
         });
 
-        this.handleEvent(socket, SocketEvents.Username, body => {
-            socket.username = body.username;
-            this.sendEvent(this.io.sockets, SocketEvents.Users, {
-                users: this.getUsernames(),
-            });
+        this.handleEvent(socket, SocketEvents.ClientMessage, (body, _1) => {
+            const message: IMessage = {
+                authorId: socket.id,
+                message: body.message,
+                timestamp: Date.now(),
+            };
+
+            this.sendEvent(this.io.sockets, SocketEvents.Message, message);
         });
     }
 
@@ -73,11 +93,15 @@ class SocketServer implements ISocketServer {
         socket.on(socketEvent, handler);
     }
 
-    private getUsernames(): string[] {
-        return _(this.io.sockets.sockets)
-            .map(x => x.username)
-            .filter(x => isOk(x))
-            .value();
+    private getUsers(): IUsers {
+        return {
+            users: _(this.usersCache)
+                .mapValues(name => ({
+                    username: name,
+                }))
+                .pickBy(user => safeGet(user, x => isOk(x.username), false))
+                .value(),
+        };
     }
 }
 

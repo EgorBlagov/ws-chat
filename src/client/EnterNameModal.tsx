@@ -5,10 +5,9 @@ import { Alert, Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 interface IProps {
     show: boolean;
     onSaveName: (newName: string) => void;
-    usedNames: string[];
 }
 
-export const EnterNameModal = ({ show, onSaveName, usedNames }: IProps) => {
+export const EnterNameModal = ({ show, onSaveName }: IProps) => {
     const [name, setName] = React.useState<string>();
 
     const saveName = () => {
@@ -22,23 +21,21 @@ export const EnterNameModal = ({ show, onSaveName, usedNames }: IProps) => {
     // tslint:disable-next-line: no-empty
     const onHide = () => {};
 
-    const isNameTaken = (n: string): boolean => {
-        return _(usedNames)
-            .map(x => x.toLowerCase())
-            .includes(n.toLowerCase());
-    };
+    const isInvalid = !name;
 
-    const isInvalid = !name || isNameTaken(name);
     const formDescription = () => {
         if (!name) {
             return "Name must not be empty";
         }
 
-        if (isNameTaken(name)) {
-            return "Name already taken";
-        }
-
         return "Ok";
+    };
+
+    const handleEnter = (e: any) => {
+        if (e.keyCode === 13 && e.shiftKey === false) {
+            e.preventDefault();
+            saveName();
+        }
     };
 
     return (
@@ -52,8 +49,8 @@ export const EnterNameModal = ({ show, onSaveName, usedNames }: IProps) => {
                 </Alert>
                 <InputGroup>
                     <FormControl
-                        id="name-input"
                         placeholder="Please, enter your name"
+                        onKeyDown={handleEnter}
                         onChange={editName}
                         isInvalid={isInvalid}
                     />

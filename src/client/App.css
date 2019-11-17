@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .main {
@@ -13,5 +14,113 @@
 }
 
 .main__body {
-    margin: 10px;
+    padding: 10px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: minmax(0, 4fr) minmax(0, 1fr);
+
+    gap: 0.5em;
+}
+
+.main__users {
+    grid-row: 1/-1;
+}
+
+.main__messages {
+}
+
+.main__send {
+    grid-column: 2/3;
+}
+
+.main__status-icon {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.main__status-icon-wrapper {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 1100;
+}
+
+.main__status-error {
+    display: block;
+}
+
+:root {
+    --error-color: #ff764d;
+    --success-color: #73e673;
+}
+
+.error-flash {
+    color: var(--error-color);
+    animation: 0.5s steps(2, jump-none) 0s infinite alternate icon-flashing;
+}
+
+.main__status-icon.active {
+    animation: 0.5s ease-out 0s infinite alternate icon-flashing;
+    background-color: var(--success-color);
+}
+
+.main__center-spinner {
+    position: absolute;
+    top: calc(50% - 4rem);
+    left: calc(50% - 4rem);
+    width: 8rem;
+    height: 8rem;
+    opacity: 50%;
+}
+
+.users__status-icon {
+    color: var(--success-color);
+}
+
+@keyframes icon-flashing {
+    from {
+        opacity: 0%;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+.messages__history {
+    overflow-y: auto;
+}
+
+.messages {
+    height: 100%;
+}
+
+.messages__date {
+    font-size: 0.8em;
+}
+
+.users {
+    height: 100%;
+}
+
+.users__list {
+    overflow-y: auto;
+}
+
+.send-area__main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.send-area__text {
+    resize: none;
+    flex: auto;
+}
+
+.send-area__send {
+    margin-left: auto;
+    margin-top: 0.5em;
 }
