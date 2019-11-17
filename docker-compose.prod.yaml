@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+    chat:
+        ports:
+            - ${APP_PORT}:${PORT}
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+            args:
+                PUBLIC_URL: ${PUBLIC_URL}
+        environment:
+            - PORT=${PORT}
+        tty: true
