@@ -6,15 +6,14 @@ import { Server } from "http";
 import { isOk, toMsg } from "../common/utils";
 import {
     IMessage,
-    IUser,
     IUsers,
+    IUsersMap,
     SocketEventBody,
     SocketEventHandler,
     SocketEvents,
     socketPath,
     TRoomID,
     TUserID,
-    IUsersMap,
 } from "../common/websocket-declaration";
 import { logger } from "./logging";
 import { RoomManager } from "./room-manager";

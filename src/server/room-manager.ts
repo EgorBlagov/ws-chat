@@ -12,7 +12,7 @@ export class RoomManager {
 
     public createRoom(): TRoomID {
         for (let i = 0; i < ROOM_CREATE_TRIALS; i++) {
-            const roomId = crypto.randomBytes(8).toString("hex");
+            const roomId = crypto.randomBytes(3).toString("hex");
             if (!this.rooms.has(roomId)) {
                 logger.info(`Room created ${roomId}`);
                 this.rooms.set(roomId, new Set<TUserID>());
