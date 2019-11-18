@@ -14,7 +14,7 @@ interface IProps {
     roomId: TRoomID;
 }
 
-export const Chat = ({ userId }: IProps) => {
+export const Chat = ({ userId, roomId }: IProps) => {
     const [users, setUsers] = React.useState<IUsers>({ users: {} });
     const [messages, setMessages] = React.useState<IMessage[]>([]);
     const sendMessage = (message: string) => {
@@ -57,6 +57,9 @@ export const Chat = ({ userId }: IProps) => {
 
     return (
         <div className="chat">
+            <div className="chat__header">
+                Room ID: <strong>{roomId}</strong>
+            </div>
             <div className="chat__users">
                 <Users userId={userId} users={users} />
             </div>

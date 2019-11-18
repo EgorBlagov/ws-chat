@@ -58,11 +58,11 @@ class SocketServer implements ISocketServer {
 
                 // Room can be removed after last user leave
                 if (this.roomManager.isExist(roomId)) {
-                    this.sendEvent(this.io.to(roomId), SocketEvents.Users, this.getUsers(roomId));
                     this.sendEvent(this.io.to(roomId), SocketEvents.Left, {
                         timestamp: Date.now(),
                         userId: socket.id,
                     });
+                    this.sendEvent(this.io.to(roomId), SocketEvents.Users, this.getUsers(roomId));
                 }
                 this.userInfos.delete(socket.id);
             }

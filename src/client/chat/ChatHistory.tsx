@@ -21,9 +21,9 @@ export const ChatHistory = ({ users, messages }: IProps) => {
     }, [messages]);
 
     return (
-        <Card className="messages">
+        <Card className="history">
             <Card.Header as="h5">Chat</Card.Header>
-            <ListGroup variant="flush" className="messages__history">
+            <ListGroup variant="flush" className="history__body">
                 {_.map(messages, (m, i) => {
                     const msgColor = Color(`#${sha1(m.authorId).slice(0, 6)}`);
                     const authorStyle: React.CSSProperties = {
@@ -42,7 +42,7 @@ export const ChatHistory = ({ users, messages }: IProps) => {
                                     {authorName}
                                 </div>
                                 <div>{m.message}</div>
-                                <div className="messages__date text-muted ml-auto align-self-start">
+                                <div className="history__date text-muted ml-auto align-self-start">
                                     {new Date(m.timestamp).toLocaleString("ru-RU", {
                                         hour: "numeric",
                                         minute: "numeric",
