@@ -25,9 +25,10 @@ export type TRoomID = string;
 export interface IUser {
     username: string;
 }
+export interface IUsersMap extends Record<TUserID, IUser> {}
 
 export interface IUsers {
-    users: Record<TUserID, IUser>;
+    users: IUsersMap;
 }
 
 export interface IUsername {

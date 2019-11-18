@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as React from "react";
-import { IMessage, IUsers, SocketEvents, TRoomID, TUserID } from "../../common/websocket-declaration";
+import { IMessage, IUsersMap, SocketEvents, TRoomID, TUserID } from "../../common/websocket-declaration";
 import { useConditionResolver, useSocketHandler } from "../logic/hooks";
 import { INTERNAL_AUTHOR_ID } from "../logic/internal";
 import { socket } from "../logic/socket-client";
@@ -15,7 +15,8 @@ interface IProps {
 }
 
 export const Chat = ({ userId, roomId }: IProps) => {
-    const [users, setUsers] = React.useState<IUsers>({ users: {} });
+    const [users, setUsers] = React.useState<IUsersMap>({});
+    const [usersCache, setUsersCache] = React.useState<IUsersMap>({});
     const [messages, setMessages] = React.useState<IMessage[]>([]);
     const sendMessage = (message: string) => {
         socket.send(SocketEvents.ClientMessage, { message }, null);
@@ -26,18 +27,19 @@ export const Chat = ({ userId, roomId }: IProps) => {
     });
 
     useSocketHandler(SocketEvents.Users, usersBody => {
-        setUsers(usersBody);
+        setUsersCache(p => ({ ...p, ...usersBody.users }));
+        setUsers(usersBody.users);
     });
 
-    const usersUpdateAction = useConditionResolver([users]);
+    const usersUpdateAction = useConditionResolver([usersCache]);
 
     useSocketHandler(SocketEvents.Joined, ({ userId: id, timestamp }) => {
         usersUpdateAction(
-            data => _.has(data[0].users, id),
+            data => _.has(data[0], id),
             data => {
                 setMessages(p => [
                     ...p,
-                    { authorId: INTERNAL_AUTHOR_ID, message: `${data[0].users[id].username} joined`, timestamp },
+                    { authorId: INTERNAL_AUTHOR_ID, message: `${data[0][id].username} joined`, timestamp },
                 ]);
             },
         );
@@ -45,11 +47,11 @@ export const Chat = ({ userId, roomId }: IProps) => {
 
     useSocketHandler(SocketEvents.Left, ({ userId: id, timestamp }) => {
         usersUpdateAction(
-            data => _.has(data[0].users, id),
+            data => _.has(data[0], id),
             data => {
                 setMessages(p => [
                     ...p,
-                    { authorId: INTERNAL_AUTHOR_ID, message: `${data[0].users[id].username} left`, timestamp },
+                    { authorId: INTERNAL_AUTHOR_ID, message: `${data[0][id].username} left`, timestamp },
                 ]);
             },
         );
@@ -64,7 +66,7 @@ export const Chat = ({ userId, roomId }: IProps) => {
                 <Users userId={userId} users={users} />
             </div>
             <div className="chat__history">
-                <ChatHistory messages={messages} users={users} />
+                <ChatHistory messages={messages} users={usersCache} />
             </div>
             <div className="chat__send">
                 <InputPanel sendMessage={sendMessage} />

@@ -46,12 +46,10 @@
     .chat__users {
         display: none;
     }
-
-    .chat__history {
-        grid-column: 1/-1;
-    }
-
-    .chat__send {
-        grid-column: 1/-1;
+    .chat {
+        grid-template-areas:
+            "header header"
+            "history"
+            "input";
     }
 }

@@ -14,6 +14,7 @@ import {
     socketPath,
     TRoomID,
     TUserID,
+    IUsersMap,
 } from "../common/websocket-declaration";
 import { logger } from "./logging";
 import { RoomManager } from "./room-manager";
@@ -133,7 +134,7 @@ class SocketServer implements ISocketServer {
         return {
             users: _.reduce(
                 this.roomManager.getUsers(roomId),
-                (result: Record<TUserID, IUser>, userId: TUserID) => {
+                (result: IUsersMap, userId: TUserID) => {
                     result[userId] = {
                         username: this.userInfos.get(userId).username,
                     };

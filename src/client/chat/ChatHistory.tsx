@@ -4,11 +4,11 @@ import * as React from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import sha1 = require("sha1");
 import { isOk, safeGet } from "../../common/utils";
-import { IMessage, IUsers } from "../../common/websocket-declaration";
+import { IMessage, IUsersMap } from "../../common/websocket-declaration";
 import { INTERNAL_AUTHOR_ID } from "../logic/internal";
 
 interface IProps {
-    users: IUsers;
+    users: IUsersMap;
     messages: IMessage[];
 }
 
@@ -29,7 +29,7 @@ export const ChatHistory = ({ users, messages }: IProps) => {
                     const authorStyle: React.CSSProperties = {
                         color: msgColor.darken(0.2).hex(),
                     };
-                    let authorName = safeGet(users, x => x.users[m.authorId].username);
+                    let authorName = safeGet(users, x => x[m.authorId].username);
                     if (m.authorId === INTERNAL_AUTHOR_ID) {
                         authorName = "Chat";
                         authorStyle.backgroundColor = "bg-primary";
