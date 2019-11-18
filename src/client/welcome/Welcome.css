@@ -1,0 +1,51 @@
+.welcome {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+}
+
+.welcome__caption {
+    margin-bottom: 0.5em;
+}
+
+.welcome__body {
+    padding: 1em;
+    box-shadow: 0px 6px 12px 1px rgba(0, 0, 0, 0.2);
+    min-width: 260px;
+}
+
+.welcome__name-input {
+    margin-bottom: 1em;
+}
+
+.welcome__room-wrapper {
+}
+
+.welcome__room-join {
+    display: flex;
+}
+.welcome__room-join-button {
+    margin-left: 0.5em;
+}
+
+.room-or {
+    position: relative;
+}
+
+.room-or__text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 2em;
+    border-radius: 5px;
+}
+
+@media only screen and (max-width: 480px) {
+    .welcome__caption {
+        font-size: 3em;
+    }
+}
