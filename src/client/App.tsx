@@ -23,6 +23,8 @@ export const App = () => {
         onDisconnect: () => {
             setUserId(undefined);
             setRoomId(undefined);
+            setLoginError(undefined);
+            setIsInitialized(false);
         },
     });
 
@@ -32,19 +34,23 @@ export const App = () => {
         }
     }, [connected]);
 
-    const saveName = (newName: string) => {
+    const login = (username: TUserID, loginRoomId?: TRoomID) => {
         socket.send(
-            SocketEvents.Username,
+            SocketEvents.Login,
             {
-                username: newName,
+                username,
+                roomId: loginRoomId,
             },
-            id => {
-                setUserId(id);
+            (receivedUserId, receivedRoomId, receivedError) => {
+                if (isOk(receivedError)) {
+                    setLoginError(receivedError);
+                } else {
+                    setUserId(receivedUserId);
+                    setRoomId(receivedRoomId);
+                }
             },
         );
     };
-
-    const login = (_username: TUserID, _roomId?: TRoomID) => {};
 
     let content = <Spinner className="app__spinner text-success" animation="border" />;
     if (isInitialized) {

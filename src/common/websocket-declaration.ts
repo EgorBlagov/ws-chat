@@ -11,6 +11,7 @@ export enum SocketEvents {
     Left = "Left",
     CreateRoom = "CreateRoom",
     JoinRoom = "JoinRoom",
+    Login = "Login",
 }
 
 export enum SocketDefinitionTypes {
@@ -48,6 +49,11 @@ export interface IUserEvent {
     timestamp: number;
 }
 
+export interface ILoginInfo {
+    username: string;
+    roomId?: string;
+}
+
 export interface ISocketDefinitionTypeMap {
     [SocketEvents.Users]: {
         [SocketDefinitionTypes.Body]: IUsers;
@@ -80,6 +86,10 @@ export interface ISocketDefinitionTypeMap {
     [SocketEvents.JoinRoom]: {
         [SocketDefinitionTypes.Body]: never;
         [SocketDefinitionTypes.Callback]: null;
+    };
+    [SocketEvents.Login]: {
+        [SocketDefinitionTypes.Body]: ILoginInfo;
+        [SocketDefinitionTypes.Callback]: (userId: TUserID, roomId: TRoomID, error?: string) => void;
     };
 }
 

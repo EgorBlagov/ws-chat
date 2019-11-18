@@ -28,14 +28,6 @@ module.exports = env => {
         },
     };
 
-    const tsLoaderCompilerOptions =
-        mode === "development"
-            ? {
-                  noUnusedParameters: false,
-                  noUnusedLocals: false,
-              }
-            : {};
-
     const clientConfig = {
         ...commonConfig,
         name: "client",
@@ -64,7 +56,6 @@ module.exports = env => {
                     loader: "ts-loader",
                     options: {
                         configFile: "tsconfig.client.json",
-                        compilerOptions: tsLoaderCompilerOptions,
                     },
                 },
                 {
@@ -104,7 +95,6 @@ module.exports = env => {
                     loader: "ts-loader",
                     options: {
                         configFile: "tsconfig.server.json",
-                        compilerOptions: tsLoaderCompilerOptions,
                     },
                 },
             ],
