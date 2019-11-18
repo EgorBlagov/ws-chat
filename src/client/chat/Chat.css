@@ -3,7 +3,7 @@
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 3fr;
-    grid-template-rows: minmax(0, auto) minmax(0, 4fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, auto) minmax(0, 4fr) minmax(120px, 1fr);
     grid-template-areas:
         "header header"
         "users history"
@@ -54,6 +54,22 @@
     font-size: 0.8em;
 }
 
+.input-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.input-panel__text {
+    resize: none;
+    flex: auto;
+}
+
+.input-panel__send {
+    margin-left: auto;
+    margin-top: 0.5em;
+}
+
 @media only screen and (max-width: 480px) {
     .chat__users {
         display: none;
@@ -62,7 +78,7 @@
     .chat {
         grid-template-areas:
             "header header"
-            "history"
-            "input";
+            "history history"
+            "input input";
     }
 }

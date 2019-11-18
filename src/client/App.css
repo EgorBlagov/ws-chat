@@ -56,19 +56,3 @@ body {
 .users__list {
     overflow-y: auto;
 }
-
-.send-area__main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.send-area__text {
-    resize: none;
-    flex: auto;
-}
-
-.send-area__send {
-    margin-left: auto;
-    margin-top: 0.5em;
-}

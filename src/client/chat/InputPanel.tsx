@@ -25,16 +25,16 @@ export const InputPanel = ({ sendMessage }: IProps) => {
     };
 
     return (
-        <div className="send-area__main">
+        <div className="input-panel">
             <textarea
                 onChange={editMessage}
                 ref={ref}
-                className="send-area__text"
+                className="input-panel__text"
                 onKeyDown={handleEnter}
                 value={message}
             />
 
-            <div className="send-area__send">
+            <div className="input-panel__send">
                 <Button onClick={send}>Send</Button>
             </div>
         </div>
