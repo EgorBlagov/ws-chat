@@ -1,0 +1,26 @@
+@keyframes icon-flashing {
+    from {
+        opacity: 0%;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+.status-icon.status-icon--error {
+    display: block;
+    color: var(--error-color);
+    animation: 0.5s steps(2, jump-none) 0s infinite alternate icon-flashing;
+}
+
+.status-icon {
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+}
+
+.status-icon.status-icon--active {
+    animation: 0.5s ease-out 0s infinite alternate icon-flashing;
+    background-color: var(--success-color);
+}

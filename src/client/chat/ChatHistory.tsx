@@ -3,16 +3,16 @@ import * as _ from "lodash";
 import * as React from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import sha1 = require("sha1");
-import { isOk, safeGet } from "../common/utils";
-import { IMessage, IUsers } from "../common/websocket-declaration";
-import { INTERNAL_AUTHOR_ID } from "./internal";
+import { isOk, safeGet } from "../../common/utils";
+import { IMessage, IUsers } from "../../common/websocket-declaration";
+import { INTERNAL_AUTHOR_ID } from "../logic/internal";
 
 interface IProps {
     users: IUsers;
     messages: IMessage[];
 }
 
-export const Messages = ({ users, messages }: IProps) => {
+export const ChatHistory = ({ users, messages }: IProps) => {
     const ref = React.useRef<HTMLDivElement>();
     React.useEffect(() => {
         if (isOk(ref.current)) {

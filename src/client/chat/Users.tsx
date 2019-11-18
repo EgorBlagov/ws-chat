@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import { IUsers } from "../common/websocket-declaration";
+import { IUsers } from "../../common/websocket-declaration";
 
 interface IProps {
     users: IUsers;
