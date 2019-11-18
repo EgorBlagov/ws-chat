@@ -9,6 +9,8 @@ export enum SocketEvents {
     Message = "Message",
     ClientMessage = "ClientMessage",
     Left = "Left",
+    CreateRoom = "CreateRoom",
+    JoinRoom = "JoinRoom",
 }
 
 export enum SocketDefinitionTypes {
@@ -17,6 +19,8 @@ export enum SocketDefinitionTypes {
 }
 
 export type TUserID = string;
+export type TRoomID = string;
+
 export interface IUser {
     username: string;
 }
@@ -67,6 +71,14 @@ export interface ISocketDefinitionTypeMap {
     };
     [SocketEvents.ClientMessage]: {
         [SocketDefinitionTypes.Body]: IClientMessage;
+        [SocketDefinitionTypes.Callback]: null;
+    };
+    [SocketEvents.CreateRoom]: {
+        [SocketDefinitionTypes.Body]: never;
+        [SocketDefinitionTypes.Callback]: null;
+    };
+    [SocketEvents.JoinRoom]: {
+        [SocketDefinitionTypes.Body]: never;
         [SocketDefinitionTypes.Callback]: null;
     };
 }
