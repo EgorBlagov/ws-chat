@@ -1,20 +1,20 @@
 import * as io from "socket.io-client";
-import { getUrl } from "../common/url";
-import { safeGet } from "../common/utils";
+import { getUrl } from "../../common/url";
+import { safeGet } from "../../common/utils";
 import {
     SocketEventBody,
     SocketEventCallback,
     SocketEventHandler,
     SocketEvents,
     socketPath,
-} from "../common/websocket-declaration";
+} from "../../common/websocket-declaration";
 
 export interface ISocketClient {
     readonly connected: boolean;
     send<T extends SocketEvents>(socketEvent: T, body: SocketEventBody<T>, ack: SocketEventCallback<T>): void;
     handle<T extends SocketEvents>(socketEvent: T, handler: SocketEventHandler<T>): void;
     removeHandler<T extends SocketEvents>(socketEvent: T, handler: SocketEventHandler<T>): void;
-    sendRaw(event: string, body: any, ack?: (x: any) => void): void;
+    sendRaw(event: string, body: any, ack?: (...x: any[]) => void): void;
     handleRaw(event: string, handler: (x: any) => void): void;
     removeHandlerRaw(event: string, handler: (x: any) => void): void;
     connect(): void;
@@ -27,7 +27,7 @@ class SocketIo implements ISocketClient {
         return safeGet(this.socket, s => s.connected, false);
     }
 
-    public sendRaw(event: string, body: any, ack: (x: any) => void): void {
+    public sendRaw(event: string, body: any, ack: (...x: any[]) => void): void {
         this.throwIfNotConnected();
         this.socket.emit(event, body, ack);
     }

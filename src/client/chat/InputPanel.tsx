@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 interface IProps {
     sendMessage: (message: string) => void;
 }
-export const SendArea = ({ sendMessage }: IProps) => {
+export const InputPanel = ({ sendMessage }: IProps) => {
     const [message, setMessage] = React.useState<string>(undefined);
     const ref = React.useRef<HTMLTextAreaElement>();
     const send = () => {

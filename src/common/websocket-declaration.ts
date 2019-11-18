@@ -4,11 +4,12 @@ export const socketPath: string = "/socket";
 
 export enum SocketEvents {
     Users = "Users",
-    Username = "Username",
     Joined = "Joined",
     Message = "Message",
     ClientMessage = "ClientMessage",
     Left = "Left",
+    Login = "Login",
+    Exit = "Exit",
 }
 
 export enum SocketDefinitionTypes {
@@ -17,12 +18,15 @@ export enum SocketDefinitionTypes {
 }
 
 export type TUserID = string;
+export type TRoomID = string;
+
 export interface IUser {
     username: string;
 }
+export interface IUsersMap extends Record<TUserID, IUser> {}
 
 export interface IUsers {
-    users: Record<TUserID, IUser>;
+    users: IUsersMap;
 }
 
 export interface IUsername {
@@ -44,14 +48,15 @@ export interface IUserEvent {
     timestamp: number;
 }
 
+export interface ILoginInfo {
+    username: string;
+    roomId?: string;
+}
+
 export interface ISocketDefinitionTypeMap {
     [SocketEvents.Users]: {
         [SocketDefinitionTypes.Body]: IUsers;
         [SocketDefinitionTypes.Callback]: null;
-    };
-    [SocketEvents.Username]: {
-        [SocketDefinitionTypes.Body]: IUsername;
-        [SocketDefinitionTypes.Callback]: (id: TUserID) => void;
     };
     [SocketEvents.Joined]: {
         [SocketDefinitionTypes.Body]: IUserEvent;
@@ -67,6 +72,14 @@ export interface ISocketDefinitionTypeMap {
     };
     [SocketEvents.ClientMessage]: {
         [SocketDefinitionTypes.Body]: IClientMessage;
+        [SocketDefinitionTypes.Callback]: null;
+    };
+    [SocketEvents.Login]: {
+        [SocketDefinitionTypes.Body]: ILoginInfo;
+        [SocketDefinitionTypes.Callback]: (userId: TUserID, roomId: TRoomID, error?: string) => void;
+    };
+    [SocketEvents.Exit]: {
+        [SocketDefinitionTypes.Body]: {};
         [SocketDefinitionTypes.Callback]: null;
     };
 }

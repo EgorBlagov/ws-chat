@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as React from "react";
-import { isOk } from "../common/utils";
-import { SocketEventHandler, SocketEvents } from "../common/websocket-declaration";
+import { isOk } from "../../common/utils";
+import { SocketEventHandler, SocketEvents } from "../../common/websocket-declaration";
 import { socket } from "./socket-client";
 
 export function useSocketHandler<T extends SocketEvents>(socketEvent: T, handler: SocketEventHandler<T>) {
