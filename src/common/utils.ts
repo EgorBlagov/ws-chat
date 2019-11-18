@@ -23,6 +23,8 @@ export function toMsg(err: any): string {
         if (typeof err === "string") {
             return err;
         }
-    } catch {}
-    return "Unknown error";
+        return "Unknown error";
+    } catch {
+        return "Unknown error";
+    }
 }
