@@ -4,11 +4,11 @@ import { Spinner } from "react-bootstrap";
 import { isOk } from "../common/utils";
 import { IMessage, IUsers, SocketEvents } from "../common/websocket-declaration";
 import { EnterNameModal } from "./EnterNameModal";
-import { socket } from "./socket-client";
+import { socket } from "./logic/socket-client";
 
 import "./App.css";
-import { useConditionResolver, useSocketConnected, useSocketHandler } from "./hooks";
-import { INTERNAL_AUTHOR_ID } from "./internal";
+import { useConditionResolver, useSocketConnected, useSocketHandler } from "./logic/hooks";
+import { INTERNAL_AUTHOR_ID } from "./logic/internal";
 import { Messages } from "./Messages";
 import { SendArea } from "./SendArea";
 import { StatusIcon } from "./StatusIcon";

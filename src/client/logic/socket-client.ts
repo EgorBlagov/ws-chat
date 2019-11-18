@@ -1,13 +1,13 @@
 import * as io from "socket.io-client";
-import { getUrl } from "../common/url";
-import { safeGet } from "../common/utils";
+import { getUrl } from "../../common/url";
+import { safeGet } from "../../common/utils";
 import {
     SocketEventBody,
     SocketEventCallback,
     SocketEventHandler,
     SocketEvents,
     socketPath,
-} from "../common/websocket-declaration";
+} from "../../common/websocket-declaration";
 
 export interface ISocketClient {
     readonly connected: boolean;
