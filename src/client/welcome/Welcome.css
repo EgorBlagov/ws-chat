@@ -14,6 +14,7 @@
     padding: 1em;
     box-shadow: 0px 6px 12px 1px rgba(0, 0, 0, 0.2);
     min-width: 260px;
+    max-width: 310px;
 }
 
 .welcome__name-input {
@@ -25,9 +26,31 @@
 
 .welcome__room-join {
     display: flex;
+    margin-bottom: 1em;
 }
+
 .welcome__room-join-button {
     margin-left: 0.5em;
+}
+
+.welcome__alert {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 2em;
+    margin: 0;
+    transition-property: min-height, height, border-width, padding, color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.welcome__alert--hidden {
+    color: rgba(0, 0, 0, 0);
+    min-height: 0;
+    height: 0;
+    border-width: 0;
+    padding: 0;
 }
 
 .room-or {

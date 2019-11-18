@@ -7,22 +7,22 @@ import { SocketEvents, TRoomID, TUserID } from "../common/websocket-declaration"
 import { socket } from "./logic/socket-client";
 
 import "./App.css";
+import { Chat } from "./chat/Chat";
 import { useSocketConnected } from "./logic/hooks";
 import { StatusIcon } from "./StatusIcon";
 import { Welcome } from "./welcome/Welcome";
 
 export const App = () => {
-    const [username, setUsername] = React.useState<string>(undefined);
     const [userId, setUserId] = React.useState<TUserID>(undefined);
     const [roomId, setRoomId] = React.useState<TRoomID>(undefined);
+    const [loginError, setLoginError] = React.useState<string>(undefined);
 
     const [isInitialized, setIsInitialized] = React.useState<boolean>(false);
 
     const connected = useSocketConnected({
-        onConnect: () => {
-            if (isOk(username)) {
-                socket.send(SocketEvents.Username, { username }, id => setUserId(id));
-            }
+        onDisconnect: () => {
+            setUserId(undefined);
+            setRoomId(undefined);
         },
     });
 
@@ -38,11 +38,26 @@ export const App = () => {
             {
                 username: newName,
             },
-            id => setUserId(id),
+            id => {
+                setUserId(id);
+            },
         );
-
-        setUsername(newName);
     };
+
+    const login = (_username: TUserID, _roomId?: TRoomID) => {};
+
+    let content = <Spinner className="app__spinner text-success" animation="border" />;
+    if (isInitialized) {
+        if (isOk(userId) && isOk(roomId)) {
+            content = <Chat userId={userId} roomId={roomId} />;
+        } else {
+            content = (
+                <div className="app__welcome">
+                    <Welcome login={login} error={loginError} />
+                </div>
+            );
+        }
+    }
 
     return (
         <>
@@ -51,13 +66,7 @@ export const App = () => {
                     <div className="app__status-icon">
                         <StatusIcon active={connected} />
                     </div>
-                    {!isInitialized ? (
-                        <Spinner className="app__spinner text-success" animation="border" />
-                    ) : (
-                        <div className="app__welcome">
-                            <Welcome saveName={saveName} />
-                        </div>
-                    )}
+                    {content}
                 </div>
             </div>
         </>

@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as React from "react";
-import { IMessage, IUsers, SocketEvents, TUserID } from "../../common/websocket-declaration";
+import { IMessage, IUsers, SocketEvents, TRoomID, TUserID } from "../../common/websocket-declaration";
 import { useConditionResolver, useSocketHandler } from "../logic/hooks";
 import { INTERNAL_AUTHOR_ID } from "../logic/internal";
 import { socket } from "../logic/socket-client";
@@ -11,6 +11,7 @@ import { Users } from "./Users";
 
 interface IProps {
     userId: TUserID;
+    roomId: TRoomID;
 }
 
 export const Chat = ({ userId }: IProps) => {
