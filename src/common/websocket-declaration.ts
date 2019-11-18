@@ -4,13 +4,10 @@ export const socketPath: string = "/socket";
 
 export enum SocketEvents {
     Users = "Users",
-    Username = "Username",
     Joined = "Joined",
     Message = "Message",
     ClientMessage = "ClientMessage",
     Left = "Left",
-    CreateRoom = "CreateRoom",
-    JoinRoom = "JoinRoom",
     Login = "Login",
     Exit = "Exit",
 }
@@ -61,10 +58,6 @@ export interface ISocketDefinitionTypeMap {
         [SocketDefinitionTypes.Body]: IUsers;
         [SocketDefinitionTypes.Callback]: null;
     };
-    [SocketEvents.Username]: {
-        [SocketDefinitionTypes.Body]: IUsername;
-        [SocketDefinitionTypes.Callback]: (id: TUserID) => void;
-    };
     [SocketEvents.Joined]: {
         [SocketDefinitionTypes.Body]: IUserEvent;
         [SocketDefinitionTypes.Callback]: null;
@@ -79,14 +72,6 @@ export interface ISocketDefinitionTypeMap {
     };
     [SocketEvents.ClientMessage]: {
         [SocketDefinitionTypes.Body]: IClientMessage;
-        [SocketDefinitionTypes.Callback]: null;
-    };
-    [SocketEvents.CreateRoom]: {
-        [SocketDefinitionTypes.Body]: never;
-        [SocketDefinitionTypes.Callback]: null;
-    };
-    [SocketEvents.JoinRoom]: {
-        [SocketDefinitionTypes.Body]: never;
         [SocketDefinitionTypes.Callback]: null;
     };
     [SocketEvents.Login]: {
