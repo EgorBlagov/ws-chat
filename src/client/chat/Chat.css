@@ -46,6 +46,10 @@
     overflow-y: auto;
 }
 
+.history__message {
+    white-space: pre-wrap;
+}
+
 .history__date {
     font-size: 0.8em;
 }
@@ -54,6 +58,7 @@
     .chat__users {
         display: none;
     }
+
     .chat {
         grid-template-areas:
             "header header"

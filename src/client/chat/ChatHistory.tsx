@@ -41,7 +41,7 @@ export const ChatHistory = ({ users, messages }: IProps) => {
                                 <div className="mr-1 align-self-start font-weight-bold" style={authorStyle}>
                                     {authorName}
                                 </div>
-                                <div>{m.message}</div>
+                                <div className="history__message">{m.message}</div>
                                 <div className="history__date text-muted ml-auto align-self-start">
                                     {new Date(m.timestamp).toLocaleString("ru-RU", {
                                         hour: "numeric",
