@@ -49,23 +49,11 @@ class SocketServer implements ISocketServer {
         logger.info("+total: " + _.size(this.io.sockets.sockets));
         socket.on("disconnect", () => {
             logger.info("-total: " + _.size(this.io.sockets.sockets));
-            if (this.userInfos.has(socket.id)) {
-                const roomId = this.userInfos.get(socket.id).roomId;
+            this.userExit(socket);
+        });
 
-                if (this.roomManager.isExist(roomId)) {
-                    this.roomManager.leave(socket.id, this.userInfos.get(socket.id).roomId);
-                }
-
-                // Room can be removed after last user leave
-                if (this.roomManager.isExist(roomId)) {
-                    this.sendEvent(this.io.to(roomId), SocketEvents.Left, {
-                        timestamp: Date.now(),
-                        userId: socket.id,
-                    });
-                    this.sendEvent(this.io.to(roomId), SocketEvents.Users, this.getUsers(roomId));
-                }
-                this.userInfos.delete(socket.id);
-            }
+        this.handleEvent(socket, SocketEvents.Exit, () => {
+            this.userExit(socket);
         });
 
         this.handleEvent(socket, SocketEvents.Login, ({ username, roomId }, ack) => {
@@ -142,6 +130,26 @@ class SocketServer implements ISocketServer {
                 {},
             ),
         };
+    }
+
+    private userExit(socket: io.Socket) {
+        if (this.userInfos.has(socket.id)) {
+            const roomId = this.userInfos.get(socket.id).roomId;
+
+            if (this.roomManager.isExist(roomId)) {
+                this.roomManager.leave(socket.id, this.userInfos.get(socket.id).roomId);
+            }
+
+            // Room can be removed after last user leave
+            if (this.roomManager.isExist(roomId)) {
+                this.sendEvent(this.io.to(roomId), SocketEvents.Left, {
+                    timestamp: Date.now(),
+                    userId: socket.id,
+                });
+                this.sendEvent(this.io.to(roomId), SocketEvents.Users, this.getUsers(roomId));
+            }
+            this.userInfos.delete(socket.id);
+        }
     }
 }
 

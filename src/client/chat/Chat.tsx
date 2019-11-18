@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as React from "react";
+import { Button } from "react-bootstrap";
 import { IMessage, IUsersMap, SocketEvents, TRoomID, TUserID } from "../../common/websocket-declaration";
 import { useConditionResolver, useSocketHandler } from "../logic/hooks";
 import { INTERNAL_AUTHOR_ID } from "../logic/internal";
@@ -12,9 +13,10 @@ import { Users } from "./Users";
 interface IProps {
     userId: TUserID;
     roomId: TRoomID;
+    exit: () => void;
 }
 
-export const Chat = ({ userId, roomId }: IProps) => {
+export const Chat = ({ userId, roomId, exit }: IProps) => {
     const [users, setUsers] = React.useState<IUsersMap>({});
     const [usersCache, setUsersCache] = React.useState<IUsersMap>({});
     const [messages, setMessages] = React.useState<IMessage[]>([]);
@@ -60,7 +62,12 @@ export const Chat = ({ userId, roomId }: IProps) => {
     return (
         <div className="chat">
             <div className="chat__header">
-                Room ID: <strong>{roomId}</strong>
+                <div className="chat__room-id">
+                    Room ID: <strong>{roomId}</strong>
+                </div>
+                <Button className="chat__exit" onClick={exit}>
+                    Exit
+                </Button>
             </div>
             <div className="chat__users">
                 <Users userId={userId} users={users} />

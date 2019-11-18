@@ -12,6 +12,7 @@ export enum SocketEvents {
     CreateRoom = "CreateRoom",
     JoinRoom = "JoinRoom",
     Login = "Login",
+    Exit = "Exit",
 }
 
 export enum SocketDefinitionTypes {
@@ -91,6 +92,10 @@ export interface ISocketDefinitionTypeMap {
     [SocketEvents.Login]: {
         [SocketDefinitionTypes.Body]: ILoginInfo;
         [SocketDefinitionTypes.Callback]: (userId: TUserID, roomId: TRoomID, error?: string) => void;
+    };
+    [SocketEvents.Exit]: {
+        [SocketDefinitionTypes.Body]: {};
+        [SocketDefinitionTypes.Callback]: null;
     };
 }
 

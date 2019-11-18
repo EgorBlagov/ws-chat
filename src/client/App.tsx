@@ -52,10 +52,16 @@ export const App = () => {
         );
     };
 
-    let content = <Spinner className="app__spinner text-success" animation="border" />;
+    const unlogin = () => {
+        socket.send(SocketEvents.Exit, {}, null);
+        setUserId(undefined);
+        setRoomId(undefined);
+    };
+
+    let content = <Spinner className="app__spinner text-primary" animation="border" />;
     if (isInitialized) {
         if (isOk(userId) && isOk(roomId)) {
-            content = <Chat userId={userId} roomId={roomId} />;
+            content = <Chat exit={unlogin} userId={userId} roomId={roomId} />;
         } else {
             content = (
                 <div className="app__welcome">

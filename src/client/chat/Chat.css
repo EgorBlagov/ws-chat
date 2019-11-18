@@ -14,8 +14,16 @@
 
 .chat__header {
     grid-area: header;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat__room-id {
     font-size: 1.5em;
     text-align: center;
+}
+
+.chat__exit {
 }
 
 .chat__users {
