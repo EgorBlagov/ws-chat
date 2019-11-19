@@ -34,6 +34,7 @@ export const InputPanel = ({ sendMessage }: IProps) => {
                 className="input-panel__text"
                 onKeyDown={handleEnter}
                 value={message}
+                maxLength={1024}
             />
 
             <div className="input-panel__send">

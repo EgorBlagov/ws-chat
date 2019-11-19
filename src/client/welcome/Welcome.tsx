@@ -45,7 +45,7 @@ export const Welcome = ({ login, error }: IProps) => {
                 <strong>Simple</strong> chat
             </div>
             <Card className="welcome__body">
-                <FormControl className="welcome__name-input" placeholder="Name" onChange={editName} />
+                <FormControl className="welcome__name-input" placeholder="Name" maxLength={24} onChange={editName} />
                 <div className="welcome__room-wrapper">
                     <Button disabled={!nameValid} block={true} onClick={getLoginHandler(true)}>
                         Create new room
