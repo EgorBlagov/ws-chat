@@ -45,6 +45,7 @@ export const App = () => {
                 if (isOk(receivedError)) {
                     setLoginError(receivedError);
                 } else {
+                    setLoginError(undefined);
                     setUserId(receivedUserId);
                     setRoomId(receivedRoomId);
                 }
