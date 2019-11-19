@@ -9,9 +9,21 @@ interface IProps {
     error: string;
 }
 
+function useAutoDisappear<T>(dep: T, delay: number): T {
+    const [localCopy, setLocalCopy] = React.useState<T>(undefined);
+    React.useEffect(() => {
+        setLocalCopy(dep);
+        const handler = setTimeout(() => setLocalCopy(undefined), delay);
+        return () => clearInterval(handler);
+    }, [dep]);
+
+    return localCopy;
+}
+
 export const Welcome = ({ login, error }: IProps) => {
     const [name, setName] = React.useState<string>(undefined);
     const [roomId, setRoomId] = React.useState<string>(undefined);
+    const displayError = useAutoDisappear(error, 2000);
     const editName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
@@ -54,9 +66,9 @@ export const Welcome = ({ login, error }: IProps) => {
                     </div>
                     <Alert
                         variant="danger"
-                        className={classnames("welcome__alert", { "welcome__alert--hidden": !error })}
+                        className={classnames("welcome__alert", { "welcome__alert--hidden": !displayError })}
                     >
-                        {error}
+                        {displayError}
                     </Alert>
                 </div>
             </Card>
