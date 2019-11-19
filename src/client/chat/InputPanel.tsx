@@ -8,9 +8,11 @@ export const InputPanel = ({ sendMessage }: IProps) => {
     const [message, setMessage] = React.useState<string>(undefined);
     const ref = React.useRef<HTMLTextAreaElement>();
     const send = () => {
-        sendMessage(message);
-        setMessage("");
-        ref.current.value = "";
+        if (message) {
+            sendMessage(message);
+            setMessage("");
+            ref.current.value = "";
+        }
     };
 
     const editMessage = (e: any) => {
