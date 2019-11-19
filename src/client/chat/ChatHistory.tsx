@@ -22,7 +22,6 @@ export const ChatHistory = ({ users, messages }: IProps) => {
 
     return (
         <Card className="history">
-            <Card.Header as="h5">Chat</Card.Header>
             <ListGroup variant="flush" className="history__body">
                 {_.map(messages, (m, i) => {
                     const msgColor = Color(`#${sha1(m.authorId).slice(0, 6)}`);

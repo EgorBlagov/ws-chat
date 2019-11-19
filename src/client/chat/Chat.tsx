@@ -1,3 +1,4 @@
+import * as classnames from "classnames";
 import * as _ from "lodash";
 import * as React from "react";
 import { Button } from "react-bootstrap";
@@ -18,6 +19,7 @@ interface IProps {
 
 export const Chat = ({ userId, roomId, exit }: IProps) => {
     const [users, setUsers] = React.useState<IUsersMap>({});
+    const [usersVisible, setUsersVisible] = React.useState<boolean>(false);
     const [usersCache, setUsersCache] = React.useState<IUsersMap>({});
     const [messages, setMessages] = React.useState<IMessage[]>([]);
     const sendMessage = (message: string) => {
@@ -59,9 +61,20 @@ export const Chat = ({ userId, roomId, exit }: IProps) => {
         );
     });
 
+    const toggleUsersVisible = () => {
+        setUsersVisible(!usersVisible);
+    };
+
+    const hideUsers = () => {
+        setUsersVisible(false);
+    };
+
     return (
         <div className="chat">
             <div className="chat__header">
+                <div className="chat__users-btn">
+                    <Button onClick={toggleUsersVisible}>Users</Button>
+                </div>
                 <div className="chat__room-id">
                     Room ID: <strong>{roomId}</strong>
                 </div>
@@ -69,9 +82,13 @@ export const Chat = ({ userId, roomId, exit }: IProps) => {
                     Exit
                 </Button>
             </div>
-            <div className="chat__users">
+            <div className={classnames("chat__users chat__users--animated", { "chat__users--visible": usersVisible })}>
                 <Users userId={userId} users={users} />
             </div>
+            <div
+                className={classnames("chat__users-overlay", { "chat__users-overlay--visible": usersVisible })}
+                onClick={hideUsers}
+            />
             <div className="chat__history">
                 <ChatHistory messages={messages} users={usersCache} />
             </div>

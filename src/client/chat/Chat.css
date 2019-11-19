@@ -16,11 +16,18 @@
     grid-area: header;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.chat__users-btn {
+    display: none;
+    margin-right: 1em;
 }
 
 .chat__room-id {
     font-size: 1.5em;
-    text-align: center;
+    text-align: left;
+    flex: auto;
 }
 
 .chat__exit {
@@ -36,6 +43,10 @@
 
 .chat__send {
     grid-area: input;
+}
+
+.chat__users-overlay {
+    display: none;
 }
 
 .history {
@@ -72,7 +83,38 @@
 
 @media only screen and (max-width: 480px) {
     .chat__users {
-        display: none;
+        z-index: 2001;
+        position: absolute;
+        width: 200px;
+        top: 50%;
+        left: 0;
+        transform: translate(-100%, -50%);
+        box-shadow: none;
+    }
+
+    .chat__users.chat__users--visible {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0px 6px 12px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat__users-overlay {
+        position: absolute;
+        display: block;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: black;
+        z-index: 2000;
+
+        visibility: collapse;
+        opacity: 0;
+    }
+
+    .chat__users-overlay.chat__users-overlay--visible {
+        visibility: visible;
+        opacity: 0.2;
     }
 
     .chat {
@@ -80,5 +122,14 @@
             "header header"
             "history history"
             "input input";
+    }
+
+    .chat__users-btn {
+        display: block;
+        z-index: 2001;
+    }
+
+    .chat__room-id {
+        font-size: 1em;
     }
 }
