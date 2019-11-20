@@ -6,7 +6,6 @@ services:
             - ${APP_PORT}:${PORT}
         build:
             context: .
-            dockerfile: Dockerfile.dev
             args:
                 PUBLIC_URL: ${PUBLIC_URL}
         environment:
